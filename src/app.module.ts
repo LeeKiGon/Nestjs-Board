@@ -1,6 +1,12 @@
-import { Module } from '@nestjs/common';
+import { AuthController } from './auth/auth.controller';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -16,6 +22,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    AuthModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule 
+implements NestModule 
+{
+  configure(consumer: MiddlewareConsumer) 
+  {
+    consumer
+    .apply(LoggerMiddleware)
+    .forRoutes('*');
+  }
+}

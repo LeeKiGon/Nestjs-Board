@@ -2,7 +2,7 @@ import { BaseEntity } from '../../base-entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity('users')
-export class User extends BaseEntity { // 1
+export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 20, nullable: false })
   name: string;
 
