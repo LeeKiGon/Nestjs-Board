@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { Controller, Delete, Get, Patch, Post, UseFilters, HttpException, Param, ParseIntPipe, UseInterceptors, Body } from '@nestjs/common';
 import { PositiveIntPipe } from 'src/common/pipes/positivelnt.pipe';
 import { CreateAuthDto } from './dto/create-auth.dto';
+import { User } from './entities/user.entity';
 
 
 @Controller('auth')
@@ -25,8 +26,8 @@ export class AuthController {
     }
 
     @Post() //회원 가입
-    async signUP (@Body() body: CreateAuthDto) {
-        return this.authService.signUp(body);
+    async signUP(@Body() body: CreateAuthDto): Promise<User> {
+        return await this.authService.signUp(body);
     }
 
     @Post() //로그인
