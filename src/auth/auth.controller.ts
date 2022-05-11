@@ -31,8 +31,8 @@ export class AuthController {
     }
 
     @Post() //로그인
-    login() {
-        return 'login';
+    async login(@Body() body: CreateAuthDto): Promise<User> {
+        return await this.authService.login(body);
     }
 
     @Patch(':id') //회원 정보 수정

@@ -1,5 +1,6 @@
+import { LoginRequestDto } from './dto/login.request.dto';
 import { UserRepository } from './auth.repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
@@ -27,8 +28,17 @@ export class AuthService {
         user.password = hashedPassword;
         
         await this.userRepository.save(user);
-        console.log(user);
 
         return user;
+    }
+
+    async login(data: LoginRequestDto) {
+        const { email, password } = data;
+
+        const user = await this.userRepository.findUserByEmail(email);
+
+        if (!user) {
+            throw new UnauthorizedException('이메일과 비밀번호를 확인해주세요!');
+        }
     }
 }
