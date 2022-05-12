@@ -1,8 +1,13 @@
 import { BaseEntity } from '../../base-entity';
-import { Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @Entity('users')
 export class User extends BaseEntity {
+  static findOne(email: string) {
+      throw new Error('Method not implemented.');
+  }
   @Column({ type: 'varchar', length: 20, nullable: false })
   name: string;
 
@@ -11,4 +16,18 @@ export class User extends BaseEntity {
 
   @Column({ type: 'varchar', length: 30, nullable: false })
   password: string;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+    async hashPassword(): Promise<void> {
+      if (this.password) {
+        try {
+          this.password = await bcrypt.hash(this.password, 10);
+      } catch (error) {
+        console.error(error);
+
+        throw new InternalServerErrorException();
+      }
+    }
+  }
 }

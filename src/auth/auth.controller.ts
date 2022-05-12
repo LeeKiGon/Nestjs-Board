@@ -26,14 +26,14 @@ export class AuthController {
     }
 
     @Post() //회원 가입
-    async signUP(@Body() body: CreateAuthDto): Promise<User> {
+    async signUp(@Body() body: CreateAuthDto): Promise<User> {
         return await this.authService.signUp(body);
     }
 
-    @Post() //로그인
-    async login(@Body() body: CreateAuthDto): Promise<User> {
-        return await this.authService.login(body);
-    }
+    // @Post() //로그인
+    // async login(@Body() body: CreateAuthDto): Promise<User> {
+    //     return await this.authService.login(body);
+    // }
 
     @Patch(':id') //회원 정보 수정
     patchuser() {
