@@ -1,3 +1,4 @@
+import { LoginRequestDto } from './dto/login.request.dto';
 import { UserRepository } from './auth.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtStrategy } from './jwt/jwt.strategy';
@@ -7,9 +8,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { User } from './entities/user.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            isGlobal: true}),
         PassportModule.register({ defaultStrategy: 'jwt', session: false }),
 
         JwtModule.register({
@@ -18,7 +22,7 @@ import { User } from './entities/user.entity';
         }),
         TypeOrmModule.forFeature([UserRepository])
     ],
-    providers: [AuthService, JwtStrategy],
+    providers: [AuthService, JwtStrategy, LoginRequestDto],
     controllers: [AuthController],
     exports: [AuthService],
 })

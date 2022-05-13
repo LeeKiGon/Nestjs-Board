@@ -1,3 +1,4 @@
+import { LoginRequestDto } from './dto/login.request.dto';
 import { successInterceptor } from './../common/interceptors/success.interceptor';
 import { HttpExceptionFilter } from '../common/exceptions/http-exception.filter';
 import { AuthService } from './auth.service';
@@ -30,10 +31,10 @@ export class AuthController {
         return await this.authService.signUp(body);
     }
 
-    // @Post() //로그인
-    // async login(@Body() body: CreateAuthDto): Promise<User> {
-    //     return await this.authService.login(body);
-    // }
+    @Post('login') //로그인
+    async login(@Body() data: LoginRequestDto) {
+        return await this.authService.login(data);
+    }
 
     @Patch(':id') //회원 정보 수정
     patchuser() {
