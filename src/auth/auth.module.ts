@@ -16,9 +16,9 @@ import { User } from './entities/user.entity';
             secret: process.env.JWTSECRET_KEY,
             signOptions: { expiresIn: '1y'},
         }),
-        TypeOrmModule.forFeature([User])
+        TypeOrmModule.forFeature([UserRepository])
     ],
-    providers: [AuthService, JwtStrategy, UserRepository],
+    providers: [AuthService, JwtStrategy],
     controllers: [AuthController],
     exports: [AuthService],
 })
