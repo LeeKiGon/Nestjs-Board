@@ -1,11 +1,13 @@
+import { JwtAuthGuard } from './jwt/jwt.guard';
 import { LoginRequestDto } from './dto/login.request.dto';
 import { successInterceptor } from './../common/interceptors/success.interceptor';
 import { HttpExceptionFilter } from '../common/exceptions/http-exception.filter';
 import { AuthService } from './auth.service';
-import { Controller, Delete, Get, Patch, Post, UseFilters, HttpException, Param, ParseIntPipe, UseInterceptors, Body } from '@nestjs/common';
+import { Controller, Delete, Get, Patch, Post, UseFilters, HttpException, Param, ParseIntPipe, UseInterceptors, Body, Req, UseGuards } from '@nestjs/common';
 import { PositiveIntPipe } from 'src/common/pipes/positivelnt.pipe';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { User } from './entities/user.entity';
+import { Request } from 'express';
 
 
 @Controller('auth')
@@ -14,11 +16,11 @@ import { User } from './entities/user.entity';
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Get() //회원 정보 조회
-    getuser() {
-        console.log('hello wolrd')
-        // throw new HttpException('api broken', 401);
-        return 'finduser';
+    getuser(@Req() req: Request) {
+        console.log(req.user)
+        return req.user;
     }
 
     @Get(':id') //회원 정보 조회

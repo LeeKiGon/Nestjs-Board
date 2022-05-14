@@ -1,11 +1,12 @@
-import { Injectable } from "@nestjs/common";
+import { UserRepository } from './../auth.repository';
+import { Payload } from './jwt.payload';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt } from "passport-jwt";
-import { Strategy } from "passport-local";
+import { ExtractJwt, Strategy } from "passport-jwt";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor() {
+    constructor(private readonly userRepository: UserRepository) {
         super({
             // 헤더 Authentication 에서 Bearer 토큰으로부터 jwt를 추출하겠다는 의미
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), 
@@ -14,5 +15,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
     
-    // async validate(payload) {}
+    async validate(payload: Payload) {
+         const user = await this.userRepository.findUserByIdWithowtPassword(
+             payload.sub,
+         );
+
+         if(user) {
+             return user;
+         } else {
+            throw new UnauthorizedException();
+         }
+    }
 }
