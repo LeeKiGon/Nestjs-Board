@@ -45,11 +45,11 @@ export class AuthService {
 
         const payload = { eamil: email, sub: user.id };
 
-        return { token: this.jwtService.sign(payload)};
+        return { token: this.jwtService.sign(payload) };
     }
 
     async getuser(id: string): Promise<User | null> {
         const user = await this.userRepository.findUserByIdWithowtPassword(id);
-        return user
+        return user;
     }
 }

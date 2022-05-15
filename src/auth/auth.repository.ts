@@ -5,20 +5,26 @@ import { User } from '../auth/entities/user.entity';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-    findById: any;
 
     async findUserByEmail(email: string): Promise<User | null> {
-        const user = await this.findOne({ email });
+        const user = await this.
+        findOne({ 
+            where: {email: email}
+        })
         return user;
-    }
+    };
 
-    async usercreate(body: CreateAuthDto): Promise<User> {        
+    async usercreate(body: CreateAuthDto): Promise<User> {
         return await this.save(body);
-    }
+    };
     
-    async findUserByIdWithowtPassword(id: string): Promise<User | null> {
-        const user = await this.findById(id).select('-password');
+    async findUserByIdWithowtPassword(id: string): Promise<User> {
+        const user = await this.
+        findOne({
+            where: {id: id},
+            select: ['email', 'name']
+        })
         return user;
-    }
+    };
     
 }

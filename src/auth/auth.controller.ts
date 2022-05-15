@@ -33,6 +33,7 @@ export class AuthController {
         return await this.authService.signUp(body);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post('login') //로그인
     async login(@Body() data: LoginRequestDto) {
         return await this.authService.login(data);
