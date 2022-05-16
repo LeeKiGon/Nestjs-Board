@@ -5,9 +5,7 @@ import { InternalServerErrorException } from '@nestjs/common';
 
 @Entity('users')
 export class User extends BaseEntity {
-  static findOne(email: string) {
-      throw new Error('Method not implemented.');
-  }
+  
   @Column({ type: 'varchar', length: 20, nullable: false })
   name: string;
 
